@@ -1,10 +1,16 @@
+=== CONFIG START ===
+
 {
     "title": "這是一個測試",
-    "date": "2024-07-23",
+    "date": "2024-07-23"
 }
 
-===
+=== CONFIG END ===
+
+=== CONTENT START ===
 
 <p>這是第一段</p>
 <p>這是第二段</p>
 <p>這是第三段第一行<br/>這是第三段第二行</p>
+
+=== CONTENT END ===
