@@ -1,0 +1,9 @@
+# Get python path
+(Get-Command python).Path ; (Get-Command pip).Path
+
+# Get Powershell version
+$PSVersionTable.PSVersion.ToString()
+# 7.4.3
+
+pip install --upgrade wheel setuptools pip
+pip install --upgrade Jinja2
