@@ -27,7 +27,9 @@ def main():
     for template_file in template_file_list:
         process_template(template_file, runtime)
 
-    # content_file_list = _common.find_file(runtime.config_data['content_path'])
+    content_file_list = _common.find_file(runtime.config_data['contents_path'])
+    for content_file in content_file_list:
+        process_content(content_file, runtime)
 
 def process_template(template_file, runtime):
     rel_path = os.path.relpath(template_file, runtime.config_data['templates_path'])
@@ -41,6 +43,40 @@ def process_template(template_file, runtime):
         render_data[f'config_{k}'] = v
     with open(output_file, 'w') as f:
         f.write(template.render(render_data))
+
+CONFIG_DATA_DEFAULT = {
+    'enable': True,
+}
+def process_content(content_file, runtime):
+    content = _common.read_file(content_file)
+
+    config_start_line_num = content.index('=== CONFIG START ===')
+    config_end_line_num = content.index('=== CONFIG END ===')
+    config_lines = content[config_start_line_num+1:config_end_line_num]
+    config_data = '\n'.join(config_lines)
+    config_data = json.loads(config_data)
+    config_data = {**CONFIG_DATA_DEFAULT, **config_data}
+
+    if not config_data['enable']:
+        return
+    
+    content_start_line_num = content.index('=== CONTENT START ===')
+    content_end_line_num = content.index('=== CONTENT END ===')
+    content_lines = content[content_start_line_num+1:content_end_line_num]
+    content = '\n'.join(content_lines)
+
+    id_hash = _common.md5(config_data['id'])
+    output_folder_path = os.path.join(runtime.config_data['output_path'], id_hash[:2], id_hash[2:4], id_hash)
+    os.makedirs(output_folder_path, exist_ok=True)
+
+    meta_output_path = os.path.join(output_folder_path, 'meta.json')
+    with open(meta_output_path, 'w') as f:
+        json.dump(config_data, f, indent=2)
+    
+    content_output_path = os.path.join(output_folder_path, 'content.txt')
+    with open(content_output_path, 'w') as f:
+        f.write(content)
+
 
 if __name__ == '__main__':
     main()
