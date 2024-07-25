@@ -71,7 +71,7 @@ def process_content(content_file, runtime):
 
     meta_output_path = os.path.join(output_folder_path, 'meta.json')
     with open(meta_output_path, 'w') as f:
-        json.dump(config_data, f, indent=2)
+        json.dump(config_data, f, indent=2, sort_keys=True)
     
     content_output_path = os.path.join(output_folder_path, 'content.txt')
     with open(content_output_path, 'w') as f:
