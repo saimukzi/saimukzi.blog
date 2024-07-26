@@ -1,6 +1,6 @@
 {
   "title": "LabClover Blog Template",
-  "contents_path": "contents",
+  "articles_path": "articles",
   "templates_path": "templates",
   "output_path": "docs"
 }
