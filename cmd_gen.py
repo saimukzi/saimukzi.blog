@@ -27,21 +27,23 @@ def main():
     for template_file in template_file_list:
         process_template(template_file, runtime)
 
+    runtime.main_template = runtime.jinja_env.get_template('_main.html')
+
     article_file_list = _common.find_file(runtime.config_data['articles_path'])
     for article_file in article_file_list:
         process_article(article_file, runtime)
 
 def process_template(template_file, runtime):
+    if os.path.basename(template_file)[:1] == '_':
+        return
     rel_path = os.path.relpath(template_file, runtime.config_data['templates_path'])
     output_file = os.path.join(runtime.config_data['output_path'], rel_path)
     template = runtime.jinja_env.get_template(rel_path)
-    output_dir = os.path.dirname(output_file)
-    if not os.path.exists(output_dir):
-        os.makedirs(output_dir)
+    os.makedirs(os.path.dirname(output_file), exist_ok=True)
     render_data = {}
     for k,v in runtime.config_data.items():
         render_data[f'config_{k}'] = v
-    with open(output_file, 'w') as f:
+    with open(output_file, 'wt', encoding='utf-8') as f:
         f.write(template.render(render_data))
 
 CONFIG_DATA_DEFAULT = {
@@ -50,33 +52,44 @@ CONFIG_DATA_DEFAULT = {
 def process_article(article_file, runtime):
     article = _common.read_file(article_file)
 
-    config_start_line_num = article.index('=== CONFIG START ===')
-    config_end_line_num = article.index('=== CONFIG END ===')
-    config_lines = article[config_start_line_num+1:config_end_line_num]
-    config_data = '\n'.join(config_lines)
-    config_data = json.loads(config_data)
-    config_data = {**CONFIG_DATA_DEFAULT, **config_data}
+    article_config_start_line_num = article.index('=== CONFIG START ===')
+    article_config_end_line_num = article.index('=== CONFIG END ===')
+    article_config_lines = article[article_config_start_line_num+1:article_config_end_line_num]
+    article_config_data = '\n'.join(article_config_lines)
+    article_config_data = json.loads(article_config_data)
+    article_config_data = {**CONFIG_DATA_DEFAULT, **article_config_data}
 
-    if not config_data['enable']:
+    if not article_config_data['enable']:
         return
     
     article_start_line_num = article.index('=== ARTICLE START ===')
     article_end_line_num = article.index('=== ARTICLE END ===')
     article_lines = article[article_start_line_num+1:article_end_line_num]
-    article = '\n'.join(article_lines)
+    article_content = '\n'.join(article_lines)
 
-    id_hash = _common.md5(config_data['id'])
+    id_hash = _common.md5(article_config_data['id'])
     output_folder_path = os.path.join(runtime.config_data['output_path'], id_hash[:2], id_hash[2:4], id_hash)
     os.makedirs(output_folder_path, exist_ok=True)
 
     meta_output_path = os.path.join(output_folder_path, 'meta.json')
     with open(meta_output_path, 'w') as f:
-        json.dump(config_data, f, indent=2, sort_keys=True)
+        json.dump(article_config_data, f, indent=2, sort_keys=True)
     
-    article_output_path = os.path.join(output_folder_path, 'article.txt')
-    with open(article_output_path, 'wt', encoding='utf-8') as f:
-        f.write(article)
-
+    article_txt_output_path = os.path.join(output_folder_path, 'article.txt')
+    with open(article_txt_output_path, 'wt', encoding='utf-8') as f:
+        f.write(article_content)
+    
+    article_id = article_config_data['id']
+    article_html_output_path = os.path.join(runtime.config_data['output_path'], 'articles', f'{article_id}.html')
+    os.makedirs(os.path.dirname(article_html_output_path), exist_ok=True)
+    render_data = {
+        'article_config_data': article_config_data,
+        'article_content': article_content,
+        'config': runtime.config_data,
+    }
+    # config_data['article'] = article
+    with open(article_html_output_path, 'wt', encoding='utf-8') as f:
+        f.write(runtime.main_template.render(render_data))
 
 if __name__ == '__main__':
     main()

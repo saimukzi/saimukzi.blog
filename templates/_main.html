@@ -1,0 +1,13 @@
+<html>
+<head>
+  {% if article_config_data is defined %}
+    <title>{{article_config_data.title}} | {{config.title}}</title>
+  {% else %}
+    <title>{{config.title}}</title>
+  {% endif %}
+  <script src="{{config.base_url}}/main.js"></script>
+</head>
+<body>
+{{article_content}}
+</body>
+</html>
