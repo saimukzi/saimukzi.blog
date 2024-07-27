@@ -7,3 +7,6 @@ $PSVersionTable.PSVersion.ToString()
 
 pip install --upgrade wheel setuptools pip
 pip install --upgrade Jinja2
+
+# start a simple http server
+python -m http.server --directory docs 8000
