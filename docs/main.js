@@ -1,5 +1,6 @@
 $(document).ready(function() {
     detectBottomAndLoadMore();
+    $(window).on('resize', detectBottomAndLoadMore);
 });
 
 addEventListener('scroll', () => {
