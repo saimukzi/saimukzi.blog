@@ -2,6 +2,6 @@
   "title": "LabClover Blog Template",
   "articles_path": "articles",
   "templates_path": "templates",
-  "output_path": "docs",
-  "base_url": "https://saimukzi.github.io/labclover.blog.template"
+  "output_path": "tmp/docs",
+  "base_url": ""
 }

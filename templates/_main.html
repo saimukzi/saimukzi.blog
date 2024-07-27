@@ -10,6 +10,14 @@
   <script src="{{config.base_url}}/main.js"></script>
 </head>
 <body>
-{{article_content}}
+  {% if article_content is defined %}
+    <div id="target_article">
+      {{article_content}}
+    </div>
+  {% endif %}
+  <div id="article_end" style="display:none"></div>
+  <div id="templates" style="display:none">
+    <div id="load_article_template"></div>
+  </div>
 </body>
 </html>
