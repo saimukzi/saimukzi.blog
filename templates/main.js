@@ -39,7 +39,6 @@ function loadMore() {
     loadMore_nextId += 1;
 }
 
-const BOTTOM_THRESHOLD = 100;
 function getIsBottom() {
-  return window.innerHeight + window.scrollY + BOTTOM_THRESHOLD >= document.body.offsetHeight;
+  return (window.innerHeight*1.5) + window.scrollY >= document.body.offsetHeight;
 }
