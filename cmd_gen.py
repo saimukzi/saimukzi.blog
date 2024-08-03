@@ -49,23 +49,14 @@ def process_template(template_file, runtime):
 CONFIG_DATA_DEFAULT = {
     'enable': True,
 }
-def process_article(article_file, runtime):
-    article = _common.read_file(article_file)
 
-    article_config_start_line_num = article.index('=== CONFIG START ===')
-    article_config_end_line_num = article.index('=== CONFIG END ===')
-    article_config_lines = article[article_config_start_line_num+1:article_config_end_line_num]
-    article_config_data = '\n'.join(article_config_lines)
-    article_config_data = json.loads(article_config_data)
-    article_config_data = {**CONFIG_DATA_DEFAULT, **article_config_data}
+def process_article(article_file, runtime):
+    article_data = get_article_data(article_file)
+    article_config_data = article_data['config']
+    article_content = article_data['content']
 
     if not article_config_data['enable']:
         return
-    
-    article_start_line_num = article.index('=== ARTICLE START ===')
-    article_end_line_num = article.index('=== ARTICLE END ===')
-    article_lines = article[article_start_line_num+1:article_end_line_num]
-    article_content = '\n'.join(article_lines)
 
     id_hash = _common.md5(article_config_data['id'])
     output_folder_path = os.path.join(runtime.config_data['output_path'], id_hash[:2], id_hash[2:4], id_hash)
@@ -90,6 +81,25 @@ def process_article(article_file, runtime):
     # config_data['article'] = article
     with open(article_html_output_path, 'wt', encoding='utf-8') as f:
         f.write(runtime.main_template.render(render_data))
+
+def get_article_data(article_file):
+    article = _common.read_file(article_file)
+    article_config_start_line_num = article.index('=== CONFIG START ===')
+    article_config_end_line_num = article.index('=== CONFIG END ===')
+    article_config_lines = article[article_config_start_line_num+1:article_config_end_line_num]
+    article_config_data = '\n'.join(article_config_lines)
+    article_config_data = json.loads(article_config_data)
+    article_config_data = {**CONFIG_DATA_DEFAULT, **article_config_data}
+
+    article_start_line_num = article.index('=== ARTICLE START ===')
+    article_end_line_num = article.index('=== ARTICLE END ===')
+    article_lines = article[article_start_line_num+1:article_end_line_num]
+    article_content = '\n'.join(article_lines)
+    
+    return {
+        'config': article_config_data,
+        'content': article_content,
+    }
 
 if __name__ == '__main__':
     main()
