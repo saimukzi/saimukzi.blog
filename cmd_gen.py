@@ -24,6 +24,7 @@ def main():
     runtime.tag_id_to_data_dict = {}
 
     runtime.jinja_env = jinja2.Environment(loader=jinja2.FileSystemLoader(runtime.config_data['templates_path']))
+    runtime.jinja_env.filters['json_encode'] = jinja_filter_json_encode
     
     template_file_list = _common.find_file(runtime.config_data['templates_path'])
     for template_file in template_file_list:
@@ -64,16 +65,15 @@ def process_article(article_file, runtime):
     if not article_config_data['enable']:
         return
 
-    id_hash = _common.md5(article_config_data['id'])
-    output_folder_path = os.path.join(runtime.config_data['output_path'], id_hash[:2], id_hash[2:4], id_hash)
+    output_folder_path = db_path('article.'+article_config_data['id'], runtime)
     os.makedirs(output_folder_path, exist_ok=True)
 
     meta_output_path = os.path.join(output_folder_path, 'meta.json')
     with open(meta_output_path, 'w') as f:
         json.dump(article_config_data, f, indent=2, sort_keys=True)
     
-    article_txt_output_path = os.path.join(output_folder_path, 'article.txt')
-    with open(article_txt_output_path, 'wt', encoding='utf-8') as f:
+    content_txt_output_path = os.path.join(output_folder_path, 'content.txt')
+    with open(content_txt_output_path, 'wt', encoding='utf-8') as f:
         f.write(article_content)
     
     # output article
@@ -127,6 +127,13 @@ def runtime_get_or_init_tag(runtime, tag_id):
             'article_id_list': [],
         }
     return runtime.tag_id_to_data_dict[tag_id]
+
+def jinja_filter_json_encode(obj):
+    return json.dumps(obj)
+
+def db_path(key, runtime):
+    key_hash = _common.md5(key)
+    return os.path.join(runtime.config_data['output_path'], 'db', key_hash[:2], key_hash[2:4], key_hash)
 
 if __name__ == '__main__':
     main()
