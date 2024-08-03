@@ -21,6 +21,8 @@ def main():
 
     shutil.rmtree(runtime.config_data['output_path'], ignore_errors=True)
 
+    runtime.tag_id_to_data_dict = {}
+
     runtime.jinja_env = jinja2.Environment(loader=jinja2.FileSystemLoader(runtime.config_data['templates_path']))
     
     template_file_list = _common.find_file(runtime.config_data['templates_path'])
@@ -32,6 +34,10 @@ def main():
     article_file_list = _common.find_file(runtime.config_data['articles_path'])
     for article_file in article_file_list:
         process_article(article_file, runtime)
+    
+    os.makedirs(os.path.join(runtime.config_data['output_path'], 'tags'), exist_ok=True)
+    for tag_data in runtime.tag_id_to_data_dict.values():
+        process_tag(tag_data, runtime)
 
 def process_template(template_file, runtime):
     if os.path.basename(template_file)[:1] == '_':
@@ -70,6 +76,7 @@ def process_article(article_file, runtime):
     with open(article_txt_output_path, 'wt', encoding='utf-8') as f:
         f.write(article_content)
     
+    # output article
     article_id = article_config_data['id']
     article_html_output_path = os.path.join(runtime.config_data['output_path'], 'articles', f'{article_id}.html')
     os.makedirs(os.path.dirname(article_html_output_path), exist_ok=True)
@@ -78,9 +85,21 @@ def process_article(article_file, runtime):
         'article_content': article_content,
         'config': runtime.config_data,
     }
-    # config_data['article'] = article
     with open(article_html_output_path, 'wt', encoding='utf-8') as f:
         f.write(runtime.main_template.render(render_data))
+    
+    # process tags
+    tag_list = article_config_data.get('tags', [])
+    for tag_id in tag_list:
+        tag_data = runtime_get_or_init_tag(runtime, tag_id)
+        tag_data['article_id_list'].append(article_id)
+
+def process_tag(tag_data, runtime):
+    tag_id = tag_data['id']
+    tag_output_path = os.path.join(runtime.config_data['output_path'], 'tags', f'{tag_id}.json')
+    with open(tag_output_path, 'w') as f:
+        json.dump(tag_data, f, indent=2, sort_keys=True)
+
 
 def get_article_data(article_file):
     article = _common.read_file(article_file)
@@ -100,6 +119,14 @@ def get_article_data(article_file):
         'config': article_config_data,
         'content': article_content,
     }
+
+def runtime_get_or_init_tag(runtime, tag_id):
+    if tag_id not in runtime.tag_id_to_data_dict:
+        runtime.tag_id_to_data_dict[tag_id] = {
+            'id': tag_id,
+            'article_id_list': [],
+        }
+    return runtime.tag_id_to_data_dict[tag_id]
 
 if __name__ == '__main__':
     main()
