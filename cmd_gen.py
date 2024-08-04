@@ -1,4 +1,5 @@
 import argparse
+import importlib
 import jinja2
 import json
 import os
@@ -8,6 +9,8 @@ from urllib.parse import urljoin
 
 import _common
 
+MY_PATH = os.path.abspath(__file__)
+
 def main():
     parser = argparse.ArgumentParser(description='Generate the blog')
     parser.add_argument('--config', type=str, default='config.json', help='config file')
@@ -15,15 +18,56 @@ def main():
     args = parser.parse_args()
 
     runtime = types.SimpleNamespace()
+    runtime.args = args
 
-    config_path = args.config
-    with open(config_path, 'r') as f:
-        runtime.config_data = json.load(f)
-    for k,v in runtime.config_data.items():
-        if k.endswith('_path'):
-            runtime.config_data[k] = _common.to_native_path(v)
+    my_dir = os.path.dirname(MY_PATH)
+    feature_py_list = os.listdir(my_dir)
+    feature_py_list = filter(lambda x: x.startswith('_feature_'), feature_py_list)
+    feature_py_list = filter(lambda x: x.endswith('.py'), feature_py_list)
+    feature_py_list = map(lambda x: x[:-3], feature_py_list)
+    feature_py_list = list(feature_py_list)
+    runtime.module_id_to_module_dict = {}
+    for feature_py in feature_py_list:
+        runtime.module_id_to_module_dict[feature_py[9:]] = importlib.import_module(feature_py)
 
-    shutil.rmtree(runtime.config_data['output_path'], ignore_errors=True)
+    # init modules
+    runtime.func_key_to_func_dict = {}
+    runtime.func_dependency_0_to_1_set_dict = {}
+    runtime.func_dependency_1_to_0_set_dict = {}
+    for module in runtime.module_id_to_module_dict.values():
+        for func_name in dir(module):
+            if func_name.startswith('_func_'):
+                func = getattr(module, func_name)
+                func_key = get_func_key(func)
+                runtime.func_key_to_func_dict[func_key] = func
+                runtime.func_dependency_0_to_1_set_dict[func_key] = set()
+                runtime.func_dependency_1_to_0_set_dict[func_key] = set()
+        if hasattr(module, '_FUNC_DEPENDENCY_LIST'):
+            func_dependency_list = getattr(module, '_FUNC_DEPENDENCY_LIST')
+            for func_dependency in func_dependency_list:
+                for i in range(len(func_dependency)-1):
+                    func0_key = get_func_key(func_dependency[i])
+                    func1_key = get_func_key(func_dependency[i+1])
+                    runtime.func_dependency_0_to_1_set_dict[func0_key].add(func1_key)
+                    runtime.func_dependency_1_to_0_set_dict[func1_key].add(func0_key)
+    
+    runtime.ready_func_set = set()
+    for func1_key, func0_set in runtime.func_dependency_1_to_0_set_dict.items():
+        if len(func0_set) == 0:
+            runtime.ready_func_set.add(func1_key)
+    
+    runtime.done_func_key_set = set()
+    while len(runtime.ready_func_set) > 0:
+        func_key = runtime.ready_func_set.pop()
+        func = runtime.func_key_to_func_dict[func_key]
+        func(runtime)
+        runtime.done_func_key_set.add(func_key)
+        for func1_key in runtime.func_dependency_0_to_1_set_dict.get(func_key):
+            runtime.func_dependency_1_to_0_set_dict[func1_key].remove(func_key)
+            if len(runtime.func_dependency_1_to_0_set_dict[func1_key]) == 0:
+                runtime.ready_func_set.add(func1_key)
+
+    assert(len(runtime.done_func_key_set) == len(runtime.func_key_to_func_dict))
 
     runtime.tag_id_to_data_dict = {}
     runtime.sample_only = True
@@ -54,6 +98,9 @@ def main():
     os.makedirs(os.path.join(runtime.config_data['output_path'], 'tags'), exist_ok=True)
     for tag_data in runtime.tag_id_to_data_dict.values():
         process_tag(tag_data, runtime)
+
+def get_func_key(func):
+    return f'{func.__module__}.{func.__name__}'
 
 def process_template(template_file, runtime):
     if os.path.basename(template_file)[:1] == '_':
