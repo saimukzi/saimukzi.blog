@@ -1,7 +1,7 @@
 === CONFIG START ===
 
 {
-    "id": "labclover-blog-startup",
+    "id": "labclover-blog-startup-sample",
     "title": "開始第一篇文章",
     "date": "2024-07-24",
     "tags":["LabCloverBlog"],
