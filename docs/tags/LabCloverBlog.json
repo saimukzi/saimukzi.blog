@@ -1,7 +1,7 @@
 {
-  "article_id_list": [
+  "blog_id_list": [
     "image-sample",
     "labclover-blog-startup-sample"
   ],
-  "id": "LabCloverBlog"
+  "tag_id": "LabCloverBlog"
 }

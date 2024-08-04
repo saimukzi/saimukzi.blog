@@ -45,52 +45,52 @@ var loadMore_nextId = 0; // TODO: remove me
 async function _loadMore_promise() {
     console.log('_loadMore_promise')
     if (!loadMore_moreAvailable) return;
-    var moreArticleId = await getMoreArticleId_promise();
-    if (moreArticleId == null) {
+    var moreBlogId = await getMoreBlogId_promise();
+    if (moreBlogId == null) {
         loadMore_moreAvailable = false;
         return;
     }
-    var moreArticleData = await getArticleData_promise(moreArticleId);
-    var moreArticle = $('#load_article_template').clone();
-    moreArticle.attr('id', 'load_article_' + loadMore_nextId);
-    moreArticle.find('.article_title').text(moreArticleData['meta']['title']);
-    moreArticle.find('.article_content').html(moreArticleData['content']);
-    moreArticle.insertBefore('#article_end');
+    var moreBlogData = await getBlogData_promise(moreBlogId);
+    var moreBlog = $('#load_blog_template').clone();
+    moreBlog.attr('id', 'load_blog_' + loadMore_nextId);
+    moreBlog.find('.blog_title').text(moreBlogData['meta']['title']);
+    moreBlog.find('.blog_content').html(moreBlogData['content']);
+    moreBlog.insertBefore('#blog_end');
     loadMore_nextId += 1;
     return;
 }
 
-var loadMore_doneArticleIdSet = new Set();
-loadMore_doneArticleIdSet.add(ARTICLE_META['id']);
-var loadMore_articleIdList = [];
+var loadMore_doneBlogIdSet = new Set();
+loadMore_doneBlogIdSet.add(BLOG_META['id']);
+var loadMore_blogIdList = [];
 var loadMore_tagIdList = null;
-async function getMoreArticleId_promise() {
-    console.log('getMoreArticleId_promise');
+async function getMoreBlogId_promise() {
+    console.log('getMoreBlogId_promise');
     while(true){
-        while (loadMore_articleIdList.length > 0) {
-            var ret = loadMore_articleIdList.shift();
-            if (loadMore_doneArticleIdSet.has(ret)) continue;
-            loadMore_doneArticleIdSet.add(ret);
+        while (loadMore_blogIdList.length > 0) {
+            var ret = loadMore_blogIdList.shift();
+            if (loadMore_doneBlogIdSet.has(ret)) continue;
+            loadMore_doneBlogIdSet.add(ret);
             return ret;
         }
         if (loadMore_tagIdList == null) {
-            loadMore_tagIdList = ARTICLE_META['tags'];
+            loadMore_tagIdList = BLOG_META['tags'];
         }
         if (loadMore_tagIdList.length <= 0) {
             return null;
         }
         var tagId = loadMore_tagIdList.shift();
         var tagData = await getTagData_promise(tagId);
-        loadMore_articleIdList = tagData['article_id_list'];
+        loadMore_blogIdList = tagData['blog_id_list'];
     }
 }
 
-async function getArticleData_promise(articleId) {
-    console.log('getArticleData_promise', articleId);
-    var articleDbPath = getDbPath('article.'+articleId);
+async function getBlogData_promise(blogId) {
+    console.log('getBlogData_promise', blogId);
+    var blogDbPath = getDbPath('article.'+blogId);
     var retDict = {
-        'meta': await getJson_promise(joinPath([articleDbPath, 'meta.json'])),
-        'content': await getTxt_promise(joinPath([articleDbPath, 'content.txt'])),
+        'meta': await getJson_promise(joinPath([blogDbPath, 'meta.json'])),
+        'content': await getTxt_promise(joinPath([blogDbPath, 'content.txt'])),
     };
     return retDict;
 }

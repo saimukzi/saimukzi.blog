@@ -5,8 +5,8 @@
   
   <meta charset="UTF-8">
   <script>
-    const IS_ARTICLE = true;
-    const ARTICLE_META = {"enable": true, "is_sample": true, "id": "image-sample", "title": "Image sample", "date": "2024-08-04", "tags": ["LabCloverBlog"]};
+    const IS_blog = true;
+    const BLOG_META = {"enable": true, "is_sample": true, "tags": ["LabCloverBlog"], "id": "image-sample", "title": "Image sample", "date": "2024-08-04", "_path": "articles\\samples\\image-sample.txt"};
     const CONFIG = {"title": "LabClover Blog Template", "articles_path": "articles", "templates_path": "templates", "output_path": "docs", "base_url": "https://saimukzi.github.io/labclover.blog.template/"};
   </script>
   <script src="https://saimukzi.github.io/labclover.blog.template/jquery-3.7.1.min.js"></script>
@@ -15,9 +15,9 @@
 </head>
 <body>
   
-    <div id="target_article">
-      <h1 class="article_title">Image sample</h1>
-      <div class="article_content">
+    <div id="target_blog">
+      <h1 class="blog_title">Image sample</h1>
+      <div class="blog_content">
         
 <p>
   <img src="https://saimukzi.github.io/labclover.blog.template/db/7b/c8/7bc8824ad41bb35d41316e83606ab18d/bin.jfif" alt="placeholder" />
@@ -27,11 +27,11 @@
       </div>
     </div>
   
-  <div id="article_end" style="display:none"></div>
+  <div id="blog_end" style="display:none"></div>
   <div id="templates" style="display:none">
-    <div id="load_article_template">
-      <h1 class="article_title"></h1>
-      <div class="article_content"></div>
+    <div id="load_blog_template">
+      <h1 class="blog_title"></h1>
+      <div class="blog_content"></div>
     </div>
   </div>
 </body>
