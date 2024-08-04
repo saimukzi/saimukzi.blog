@@ -5,7 +5,7 @@
     "title": "開始第一篇文章",
     "date": "2024-07-24",
     "tags":["LabCloverBlog"],
-    "enable": true
+    "is_sample": true
 }
 
 === CONFIG END ===

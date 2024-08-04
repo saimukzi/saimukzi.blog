@@ -22,6 +22,7 @@ def main():
     shutil.rmtree(runtime.config_data['output_path'], ignore_errors=True)
 
     runtime.tag_id_to_data_dict = {}
+    runtime.sample_only = True
 
     runtime.jinja_env = jinja2.Environment(loader=jinja2.FileSystemLoader(runtime.config_data['templates_path']))
     runtime.jinja_env.filters['json_encode'] = jinja_filter_json_encode
@@ -34,7 +35,9 @@ def main():
 
     article_file_list = _common.find_file(runtime.config_data['articles_path'])
     for article_file in article_file_list:
-        process_article(article_file, runtime)
+        process_article_0(article_file, runtime)
+    for article_file in article_file_list:
+        process_article_1(article_file, runtime)
     
     os.makedirs(os.path.join(runtime.config_data['output_path'], 'tags'), exist_ok=True)
     for tag_data in runtime.tag_id_to_data_dict.values():
@@ -55,14 +58,29 @@ def process_template(template_file, runtime):
 
 CONFIG_DATA_DEFAULT = {
     'enable': True,
+    'is_sample': False,
 }
 
-def process_article(article_file, runtime):
+def process_article_0(article_file, runtime):
+    article_data = get_article_data(article_file)
+    article_config_data = article_data['config']
+
+    if not article_config_data['enable']:
+        return
+
+    # process is_sample
+    if not article_config_data['is_sample']:
+        runtime.sample_only = False
+
+def process_article_1(article_file, runtime):
     article_data = get_article_data(article_file)
     article_config_data = article_data['config']
     article_content = article_data['content']
 
     if not article_config_data['enable']:
+        return
+
+    if not runtime.sample_only and article_config_data['is_sample']:
         return
 
     output_folder_path = db_path('article.'+article_config_data['id'], runtime)

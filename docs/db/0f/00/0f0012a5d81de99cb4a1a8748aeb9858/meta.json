@@ -1,7 +1,8 @@
 {
   "date": "2024-07-24",
   "enable": true,
-  "id": "labclover-blog-startup",
+  "id": "labclover-blog-startup-sample",
+  "is_sample": true,
   "tags": [
     "LabCloverBlog"
   ],
