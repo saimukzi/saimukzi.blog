@@ -48,8 +48,8 @@ def jinja_filter_url(context, input_relpath, ttype='articles'):
         blog_file_path = context['blog_meta_data']['_path']
         article_file_folder_path = os.path.dirname(blog_file_path)
         input_abspath = os.path.join(article_file_folder_path, input_relpath)
-        assert(os.path.commonprefix([input_abspath, runtime.config_data['articles_path']]) == runtime.config_data['articles_path'])
-        input_relpath = os.path.relpath(input_abspath, runtime.config_data['articles_path'])
+        assert(os.path.commonprefix([input_abspath, runtime.config_data['input_path']]) == runtime.config_data['input_path'])
+        input_relpath = os.path.relpath(input_abspath, runtime.config_data['input_path'])
         output_url = runtime.article_res_fn_to_url[input_relpath]
         return output_url
     elif ttype == 'templates':

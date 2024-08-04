@@ -10,7 +10,7 @@ import _global
 _FUNC_DEPENDENCY_LIST = []
 
 def _func_gen_article_file_list(runtime):
-    article_dir = runtime.config_data['articles_path']
+    article_dir = runtime.config_data['input_path']
     article_file_list = _common.find_file(article_dir)
     runtime.article_file_list = article_file_list
 
@@ -68,7 +68,7 @@ def _func_scan_res(runtime):
         # output_local_uri = _common.local_path_to_abs_uri(output_path)
         # config_output_local_uri = _common.local_path_to_abs_uri(runtime.config_data['output_path'])
         # print(output_path)
-        input_rel_path = os.path.relpath(res_path, runtime.config_data['articles_path'])
+        input_rel_path = os.path.relpath(res_path, runtime.config_data['input_path'])
         runtime.article_res_fn_to_url[input_rel_path] = output_url
 
 def _func_article_res_fn_to_url_ready(runtime):
