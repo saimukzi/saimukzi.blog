@@ -53,7 +53,8 @@ async function _loadMore_promise() {
     var moreArticleData = await getArticleData_promise(moreArticleId);
     var moreArticle = $('#load_article_template').clone();
     moreArticle.attr('id', 'load_article_' + loadMore_nextId);
-    moreArticle.html(moreArticleData['content']);
+    moreArticle.find('.article_title').text(moreArticleData['meta']['title']);
+    moreArticle.find('.article_content').html(moreArticleData['content']);
     moreArticle.insertBefore('#article_end');
     loadMore_nextId += 1;
     return;

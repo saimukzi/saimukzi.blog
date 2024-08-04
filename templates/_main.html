@@ -18,12 +18,18 @@
 <body>
   {% if article_content is defined %}
     <div id="target_article">
-      {{article_content}}
+      <h1 class="article_title">{{article_config_data.title}}</h1>
+      <div class="article_content">
+        {{article_content}}
+      </div>
     </div>
   {% endif %}
   <div id="article_end" style="display:none"></div>
   <div id="templates" style="display:none">
-    <div id="load_article_template"></div>
+    <div id="load_article_template">
+      <h1 class="article_title"></h1>
+      <div class="article_content"></div>
+    </div>
   </div>
 </body>
 </html>
