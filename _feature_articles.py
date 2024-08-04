@@ -5,6 +5,7 @@ from urllib.parse import urljoin
 
 import _common
 import _feature_base
+import _feature_resource
 import _global
 
 _FUNC_DEPENDENCY_LIST = []
@@ -12,25 +13,19 @@ _FUNC_DEPENDENCY_LIST = []
 def _func_gen_article_file_list(runtime):
     article_dir = runtime.config_data['input_path']
     article_file_list = _common.find_file(article_dir)
+    article_file_list = list(filter(lambda x: x.endswith('.txt'), article_file_list))
     runtime.article_file_list = article_file_list
 
-    runtime.article_type_to_path_list_dict = {}
-    for article_path in article_file_list:
-        article_type = get_file_type(article_path)
-        if article_type not in runtime.article_type_to_path_list_dict:
-            runtime.article_type_to_path_list_dict[article_type] = []
-        runtime.article_type_to_path_list_dict[article_type].append(article_path)
-
-def _func_article_type_to_path_list_dict_ready(runtime):
+def _func_article_file_list_ready(runtime):
     pass
 
 _FUNC_DEPENDENCY_LIST.append((_feature_base._func_load_config, _func_gen_article_file_list))
-_FUNC_DEPENDENCY_LIST.append((_func_gen_article_file_list, _func_article_type_to_path_list_dict_ready))
-_FUNC_DEPENDENCY_LIST.append((_func_article_type_to_path_list_dict_ready, _feature_base._func_output_ready))
+_FUNC_DEPENDENCY_LIST.append((_func_gen_article_file_list, _func_article_file_list_ready))
+_FUNC_DEPENDENCY_LIST.append((_func_article_file_list_ready, _feature_base._func_output_ready))
 
 def _func_gen_blog_meta_list(runtime):
     runtime.blog_meta_list = []
-    for blog_path in runtime.article_type_to_path_list_dict['blog']:
+    for blog_path in runtime.article_file_list:
         blog_meta = get_blog_data(blog_path)['meta']
         if not blog_meta['enable']:
             continue
@@ -42,57 +37,6 @@ def _func_blog_meta_list_ready(runtime):
 _FUNC_DEPENDENCY_LIST.append((_func_gen_article_file_list, _func_gen_blog_meta_list))
 _FUNC_DEPENDENCY_LIST.append((_func_gen_blog_meta_list, _func_blog_meta_list_ready))
 _FUNC_DEPENDENCY_LIST.append((_func_blog_meta_list_ready, _feature_base._func_output_ready))
-
-def _func_scan_res(runtime):
-    runtime.article_res_fn_to_url = {}
-    runtime.article_res_output_list = []
-    for res_path in runtime.article_type_to_path_list_dict['res']:
-        dot_idx = res_path.rfind('.')
-        if dot_idx == -1:
-            file_suffix = ''
-        else:
-            file_suffix = res_path[dot_idx:]
-        file_md5 = _common.md5_file(res_path)
-        key = 'article_res.'+file_md5+file_suffix
-        output_folder_path = _global.db_path(key, runtime)
-        output_path = os.path.join(output_folder_path, 'bin'+file_suffix)
-        # os.makedirs(output_folder_path, exist_ok=True)
-        # if os.path.exists(output_path):
-        #     assert(_common.is_file_equal(res_path, output_path))
-        # else:
-        #     shutil.copy(res_path, output_path)
-        runtime.article_res_output_list.append((res_path, output_path))
-        output_rel_path = os.path.relpath(output_path, runtime.config_data['output_path'])
-        output_rel_url = _common.to_rel_url(output_rel_path)
-        output_url = urljoin(runtime.config_data['base_url'], output_rel_url)
-        # output_local_uri = _common.local_path_to_abs_uri(output_path)
-        # config_output_local_uri = _common.local_path_to_abs_uri(runtime.config_data['output_path'])
-        # print(output_path)
-        input_rel_path = os.path.relpath(res_path, runtime.config_data['input_path'])
-        runtime.article_res_fn_to_url[input_rel_path] = output_url
-
-def _func_article_res_fn_to_url_ready(runtime):
-    pass
-
-def _func_article_res_output_list_ready(runtime):
-    pass
-
-_FUNC_DEPENDENCY_LIST.append((_feature_base._func_load_config, _func_scan_res))
-_FUNC_DEPENDENCY_LIST.append((_func_article_type_to_path_list_dict_ready, _func_scan_res))
-_FUNC_DEPENDENCY_LIST.append((_func_scan_res, _func_article_res_fn_to_url_ready))
-_FUNC_DEPENDENCY_LIST.append((_func_scan_res, _func_article_res_output_list_ready))
-_FUNC_DEPENDENCY_LIST.append((_func_article_res_fn_to_url_ready, _feature_base._func_output_ready))
-_FUNC_DEPENDENCY_LIST.append((_func_article_res_output_list_ready, _feature_base._func_output_ready))
-
-def _func_output_res(runtime):
-    for res_path, output_path in runtime.article_res_output_list:
-        os.makedirs(os.path.dirname(output_path), exist_ok=True)
-        if os.path.exists(output_path):
-            assert(_common.is_file_equal(res_path, output_path))
-        else:
-            shutil.copy(res_path, output_path)
-
-_FUNC_DEPENDENCY_LIST.append((_feature_base._func_output_ready, _func_output_res))
 
 def _func_output_blog(runtime):
     for blog_meta in runtime.blog_meta_list:
@@ -132,13 +76,13 @@ def _func_output_blog(runtime):
 
 _FUNC_DEPENDENCY_LIST.append((_feature_base._func_output_ready, _func_output_blog))
 
-# Helper functions
+def _func_resource_suffix_blackset(runtime):
+    runtime.resource_suffix_blackset.add('.txt')
 
-def get_file_type(path):
-    if path.endswith('.txt'):
-        return 'blog'
-    else:
-        return 'res'
+_FUNC_DEPENDENCY_LIST.append((_feature_resource._func_resource_suffix_blackset_init, _func_resource_suffix_blackset))
+_FUNC_DEPENDENCY_LIST.append((_func_resource_suffix_blackset, _feature_resource._func_resource_suffix_blackset_ready))
+
+# Helper functions
 
 BLOG_META_DEFAULT = {
     'enable': True,
