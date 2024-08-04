@@ -1,4 +1,4 @@
-=== CONFIG START ===
+=== META START ===
 
 {
     "id": "labclover-blog-startup-sample",
@@ -8,7 +8,7 @@
     "is_sample": true
 }
 
-=== CONFIG END ===
+=== META END ===
 
 === ARTICLE START ===
 

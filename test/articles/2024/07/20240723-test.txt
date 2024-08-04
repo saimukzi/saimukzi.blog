@@ -1,11 +1,11 @@
-=== CONFIG START ===
+=== META START ===
 
 {
     "title": "這是一個測試",
     "date": "2024-07-23"
 }
 
-=== CONFIG END ===
+=== META END ===
 
 === ARTICLE START ===
 

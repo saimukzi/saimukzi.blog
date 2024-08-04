@@ -212,8 +212,8 @@ def process_tag(tag_data, runtime):
 
 def get_article_data(article_file):
     article = _common.read_file(article_file)
-    article_config_start_line_num = article.index('=== CONFIG START ===')
-    article_config_end_line_num = article.index('=== CONFIG END ===')
+    article_config_start_line_num = article.index('=== META START ===')
+    article_config_end_line_num = article.index('=== META END ===')
     article_config_lines = article[article_config_start_line_num+1:article_config_end_line_num]
     article_config_data = '\n'.join(article_config_lines)
     article_config_data = json.loads(article_config_data)
