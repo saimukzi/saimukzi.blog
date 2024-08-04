@@ -10,7 +10,7 @@
 
 === META END ===
 
-=== ARTICLE START ===
+=== CONTENT START ===
 
 <h2>注意</h2>
 <p>這個 project 還在建構中，可能還有許多沙石。</p>
@@ -34,4 +34,4 @@
   </li>
 </ul>
 
-=== ARTICLE END ===
+=== CONTENT END ===

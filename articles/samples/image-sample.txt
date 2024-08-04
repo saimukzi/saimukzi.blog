@@ -10,7 +10,7 @@
 
 === META END ===
 
-=== ARTICLE START ===
+=== CONTENT START ===
 
 <p>
   <img src="{{'place-holder.jfif'|url}}" alt="placeholder" />
@@ -18,4 +18,4 @@
   Image in local folder
 </p>
 
-=== ARTICLE END ===
+=== CONTENT END ===

@@ -219,8 +219,8 @@ def get_article_data(article_file):
     article_config_data = json.loads(article_config_data)
     article_config_data = {**CONFIG_DATA_DEFAULT, **article_config_data}
 
-    article_start_line_num = article.index('=== ARTICLE START ===')
-    article_end_line_num = article.index('=== ARTICLE END ===')
+    article_start_line_num = article.index('=== CONTENT START ===')
+    article_end_line_num = article.index('=== CONTENT END ===')
     article_lines = article[article_start_line_num+1:article_end_line_num]
     article_content = '\n'.join(article_lines)
     
