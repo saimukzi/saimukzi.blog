@@ -1,0 +1,21 @@
+=== CONFIG START ===
+
+{
+    "id": "image-sample",
+    "title": "Image sample",
+    "date": "2024-08-04",
+    "tags":["LabCloverBlog"],
+    "is_sample": true
+}
+
+=== CONFIG END ===
+
+=== ARTICLE START ===
+
+<p>
+  <img src="{{'place-holder.jfif'|url}}" alt="placeholder" />
+  <br/>
+  Image in local folder
+</p>
+
+=== ARTICLE END ===

@@ -11,9 +11,9 @@
     const ARTICLE_META = {% if article_config_data is defined %}{{article_config_data|json_encode}}{% else %}null{% endif %};
     const CONFIG = {{config|json_encode}};
   </script>
-  <script src="{{config.base_url}}/jquery-3.7.1.min.js"></script>
-  <script src="{{config.base_url}}/md5.min.js"></script>
-  <script src="{{config.base_url}}/main.js"></script>
+  <script src="{{'jquery-3.7.1.min.js'|url('templates')}}"></script>
+  <script src="{{'md5.min.js'|url('templates')}}"></script>
+  <script src="{{'main.js'|url('templates')}}"></script>
 </head>
 <body>
   {% if article_content is defined %}

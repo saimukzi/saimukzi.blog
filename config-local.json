@@ -3,5 +3,5 @@
   "articles_path": "articles",
   "templates_path": "templates",
   "output_path": "tmp/docs",
-  "base_url": ""
+  "base_url": "/"
 }
