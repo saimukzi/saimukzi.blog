@@ -62,19 +62,26 @@ def main():
         if len(func0_set) == 0:
             runtime.ready_func_set.add(func1_key)
     
-    runtime.done_func_key_set = set()
+    # runtime.done_func_key_set = set()'
+    runtime.remain_func_key_set = set(runtime.func_key_to_func_dict.keys())
     while len(runtime.ready_func_set) > 0:
         func_key = runtime.ready_func_set.pop()
         print(f'Running {func_key}')
         func = runtime.func_key_to_func_dict[func_key]
         func(runtime)
-        runtime.done_func_key_set.add(func_key)
+        # runtime.done_func_key_set.add(func_key)
+        runtime.remain_func_key_set.remove(func_key)
         for func1_key in runtime.func_dependency_0_to_1_set_dict.get(func_key):
             runtime.func_dependency_1_to_0_set_dict[func1_key].remove(func_key)
             if len(runtime.func_dependency_1_to_0_set_dict[func1_key]) == 0:
                 runtime.ready_func_set.add(func1_key)
 
-    assert(len(runtime.done_func_key_set) == len(runtime.func_key_to_func_dict))
+    # assert(len(runtime.done_func_key_set) == len(runtime.func_key_to_func_dict))
+    if (len(runtime.remain_func_key_set) > 0):
+        print('Some functions are not run:')
+        for func_key in runtime.remain_func_key_set:
+            print(func_key)
+        assert(False)
 
     # runtime.tag_id_to_data_dict = {}
     # runtime.sample_only = True

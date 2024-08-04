@@ -90,7 +90,7 @@ def jinja_filter_res(context, input_relpath):
     return output_url
 
 _FUNC_DEPENDENCY_LIST.append((
-    '_feature_templates._func_init_env',
+    '_feature_templates._func_jinja_env_init',
     _func_jinja_env,
     '_feature_templates._func_jinja_env_ready',
 ))

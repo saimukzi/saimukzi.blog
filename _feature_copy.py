@@ -27,7 +27,7 @@ def _func_scan(runtime):
         if not any(map(lambda x: x.fullmatch(input_file_relppath), copy_re_list)):
             continue
         runtime.copy_absnpath_list.append(input_file_absnpath)
-    print(runtime.copy_absnpath_list)
+    # print(runtime.copy_absnpath_list)
 
 
 _FUNC_DEPENDENCY_LIST.append((_feature_base._func_load_config, _func_scan))
