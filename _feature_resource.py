@@ -76,6 +76,7 @@ _FUNC_DEPENDENCY_LIST.append((_feature_base._func_output_ready, _func_output_res
 # Helper functions
 
 def is_black(path, runtime):
-    dot_idx = path.rfind('.')
-    suffix = path[dot_idx:]
-    return suffix in runtime.resource_suffix_blackset
+    for suffix in runtime.resource_suffix_blackset:
+        if path.endswith(suffix):
+            return True
+    return False

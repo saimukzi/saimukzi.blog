@@ -13,7 +13,7 @@ _FUNC_DEPENDENCY_LIST = []
 def _func_gen_article_file_list(runtime):
     article_dir = runtime.config_data['input_path']
     article_file_list = _common.find_file(article_dir)
-    article_file_list = list(filter(lambda x: x.endswith('.txt'), article_file_list))
+    article_file_list = list(filter(lambda x: x.endswith('.article.txt'), article_file_list))
     runtime.article_file_list = article_file_list
 
 def _func_article_file_list_ready(runtime):
@@ -77,7 +77,7 @@ def _func_output_blog(runtime):
 _FUNC_DEPENDENCY_LIST.append((_feature_base._func_output_ready, _func_output_blog))
 
 def _func_resource_suffix_blackset(runtime):
-    runtime.resource_suffix_blackset.add('.txt')
+    runtime.resource_suffix_blackset.add('.article.txt')
 
 _FUNC_DEPENDENCY_LIST.append((_feature_resource._func_resource_suffix_blackset_init, _func_resource_suffix_blackset))
 _FUNC_DEPENDENCY_LIST.append((_func_resource_suffix_blackset, _feature_resource._func_resource_suffix_blackset_ready))
