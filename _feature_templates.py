@@ -48,10 +48,10 @@ def jinja_filter_json_encode(obj):
     return json.dumps(obj)
 
 @jinja2.pass_context
-def jinja_filter_url(context, input_relpath, ttype='articles'):
-    assert(ttype in ['articles', 'templates'])
+def jinja_filter_url(context, input_relpath, ttype='db'):
+    assert(ttype in ['db', 'fix'])
     runtime = context['runtime']
-    if ttype == 'articles':
+    if ttype == 'db':
         article_file_path = context['article_meta_data']['_path']
         article_file_folder_path = os.path.dirname(article_file_path)
         input_abspath = os.path.join(article_file_folder_path, input_relpath)
@@ -59,7 +59,7 @@ def jinja_filter_url(context, input_relpath, ttype='articles'):
         input_relpath = os.path.relpath(input_abspath, runtime.config_data['input_path'])
         output_url = runtime.article_res_fn_to_url[input_relpath]
         return output_url
-    elif ttype == 'templates':
+    elif ttype == 'fix':
         output_url = urljoin(runtime.config_data['base_url'], input_relpath)
         return output_url
     assert(False)
