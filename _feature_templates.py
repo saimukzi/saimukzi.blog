@@ -12,12 +12,22 @@ _FUNC_DEPENDENCY_LIST = []
 def _func_init_env(runtime):
     runtime.jinja_env = jinja2.Environment(loader=jinja2.FileSystemLoader(runtime.config_data['input_path']))
     runtime.jinja_env.filters['json_encode'] = jinja_filter_json_encode
-    runtime.jinja_env.filters['url'] = jinja_filter_url
 
-    runtime.main_template = runtime.jinja_env.get_template('_main.html.template')
+def _func_jinja_env_ready(runtime):
+    pass
 
 _FUNC_DEPENDENCY_LIST.append((_feature_base._func_load_config, _func_init_env))
-_FUNC_DEPENDENCY_LIST.append((_func_init_env, _feature_base._func_output_ready))
+_FUNC_DEPENDENCY_LIST.append((_func_init_env, _func_jinja_env_ready))
+_FUNC_DEPENDENCY_LIST.append((_func_jinja_env_ready, _feature_base._func_output_ready))
+
+def _func_init_main_template(runtime):
+    runtime.main_template = runtime.jinja_env.get_template('_main.html.template')
+
+_FUNC_DEPENDENCY_LIST.append((
+    _func_jinja_env_ready,
+    _func_init_main_template,
+    _feature_base._func_output_ready,
+))
 
 # def _func_output(runtime):
 #     template_file_list = _common.find_file(runtime.config_data['templates_path'])
@@ -47,19 +57,19 @@ _FUNC_DEPENDENCY_LIST.append((_func_resource_suffix_blackset, _feature_resource.
 def jinja_filter_json_encode(obj):
     return json.dumps(obj)
 
-@jinja2.pass_context
-def jinja_filter_url(context, input_relpath, ttype='db'):
-    assert(ttype in ['db', 'fix'])
-    runtime = context['runtime']
-    if ttype == 'db':
-        article_file_path = context['article_meta_data']['_path']
-        article_file_folder_path = os.path.dirname(article_file_path)
-        input_abspath = os.path.join(article_file_folder_path, input_relpath)
-        assert(os.path.commonprefix([input_abspath, runtime.config_data['input_path']]) == runtime.config_data['input_path'])
-        input_relpath = os.path.relpath(input_abspath, runtime.config_data['input_path'])
-        output_url = runtime.article_res_fn_to_url[input_relpath]
-        return output_url
-    elif ttype == 'fix':
-        output_url = urljoin(runtime.config_data['base_url'], input_relpath)
-        return output_url
-    assert(False)
+# @jinja2.pass_context
+# def jinja_filter_url(context, input_relpath, ttype='db'):
+#     assert(ttype in ['db', 'fix'])
+#     runtime = context['runtime']
+#     if ttype == 'db':
+#         article_file_path = context['article_meta_data']['_path']
+#         article_file_folder_path = os.path.dirname(article_file_path)
+#         input_abspath = os.path.join(article_file_folder_path, input_relpath)
+#         assert(os.path.commonprefix([input_abspath, runtime.config_data['input_path']]) == runtime.config_data['input_path'])
+#         input_relpath = os.path.relpath(input_abspath, runtime.config_data['input_path'])
+#         output_url = runtime.article_res_fn_to_url[input_relpath]
+#         return output_url
+#     elif ttype == 'fix':
+#         output_url = urljoin(runtime.config_data['base_url'], input_relpath)
+#         return output_url
+#     assert(False)

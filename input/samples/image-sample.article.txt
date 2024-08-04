@@ -13,7 +13,7 @@
 === CONTENT START ===
 
 <p>
-  <img src="{{'place-holder.jfif'|url}}" alt="placeholder" />
+  <img src="{{'place-holder.jfif'|res}}" alt="placeholder" />
   <br/>
   Image in local folder
 </p>

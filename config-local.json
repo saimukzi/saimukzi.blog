@@ -3,8 +3,5 @@
   "input_path": "input",
   "templates_path": "templates",
   "output_path": "tmp/docs",
-  "base_url": "/",
-  "copy_re_list": [
-    ".*\\.js"
-  ]
+  "base_url": "/"
 }

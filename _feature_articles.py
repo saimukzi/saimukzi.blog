@@ -54,6 +54,7 @@ def _func_output_article(runtime):
         # process article_content
         article_content = article_data['content']
         render_data = {
+            'res_base_absnpath': os.path.dirname(article_meta['_path']),
             'article_meta_data': article_meta,
             'config': runtime.config_data,
             'runtime': runtime,
@@ -68,6 +69,7 @@ def _func_output_article(runtime):
             f.write(article_content)
         
         # output html
+        render_data['res_base_absnpath'] = runtime.config_data['input_path']
         article_id = article_meta['id']
         article_html_output_path = os.path.join(runtime.config_data['output_path'], 'articles', f'{article_id}.html')
         os.makedirs(os.path.dirname(article_html_output_path), exist_ok=True)

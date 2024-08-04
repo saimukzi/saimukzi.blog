@@ -107,6 +107,8 @@ def main():
     #     process_tag(tag_data, runtime)
 
 def get_func_key(func):
+    if(isinstance(func, str)):
+        return func
     return f'{func.__module__}.{func.__name__}'
 
 # def process_template(template_file, runtime):
