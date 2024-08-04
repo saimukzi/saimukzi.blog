@@ -1,0 +1,5 @@
+
+<p>'/js/jquery-3.7.1.min.js'|copy : https://saimukzi.github.io/labclover.article.template/js/jquery-3.7.1.min.js</p>
+<p>'../js/jquery-3.7.1.min.js'|copy : https://saimukzi.github.io/labclover.article.template/js/jquery-3.7.1.min.js</p>
+<p>'js/jquery-3.7.1.min.js'|copy : https://saimukzi.github.io/labclover.article.template/samples/js/jquery-3.7.1.min.js</p>
+<p>'jquery-3.7.1.min.js'|copy : https://saimukzi.github.io/labclover.article.template/samples/jquery-3.7.1.min.js</p>

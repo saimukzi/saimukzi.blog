@@ -1,0 +1,20 @@
+=== META START ===
+
+{
+    "id": "url-sample-article",
+    "title": "URL sample",
+    "date": "2024-08-04",
+    "tags":["LabCloverArticle"],
+    "is_sample": true
+}
+
+=== META END ===
+
+=== CONTENT START ===
+
+<p>'/js/jquery-3.7.1.min.js'|copy : {{'/js/jquery-3.7.1.min.js'|copy}}</p>
+<p>'../js/jquery-3.7.1.min.js'|copy : {{'../js/jquery-3.7.1.min.js'|copy}}</p>
+<p>'js/jquery-3.7.1.min.js'|copy : {{'js/jquery-3.7.1.min.js'|copy}}</p>
+<p>'jquery-3.7.1.min.js'|copy : {{'jquery-3.7.1.min.js'|copy}}</p>
+
+=== CONTENT END ===

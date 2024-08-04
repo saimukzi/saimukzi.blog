@@ -1,3 +1,4 @@
+import jinja2
 import json
 import os
 import re
@@ -27,7 +28,6 @@ def _func_scan(runtime):
         if not any(map(lambda x: x.fullmatch(input_file_relppath), copy_re_list)):
             continue
         runtime.copy_absnpath_list.append(input_file_absnpath)
-    # print(runtime.copy_absnpath_list)
 
 
 _FUNC_DEPENDENCY_LIST.append((_feature_base._func_load_config, _func_scan))
@@ -49,3 +49,32 @@ def _func_copy(runtime):
         shutil.copy2(copy_absnpath, copy_output_npath)
 
 _FUNC_DEPENDENCY_LIST.append((_feature_base._func_output_ready, _func_copy))
+
+def _func_jinja_env(runtime):
+    runtime.jinja_env.filters['copy'] = jinja_filter_copy
+
+@jinja2.pass_context
+def jinja_filter_copy(context, input_uri):
+    runtime = context['runtime']
+    if input_uri.startswith('/'):
+        output_url = urljoin(runtime.config_data['base_url'], input_uri[1:])
+        return output_url
+    else:
+        res_base_absnpath = context['res_base_absnpath']
+        res_base_absppath = _common.native_path_to_posix(res_base_absnpath)
+        config_input_absnpath = runtime.config_data['input_path']
+        config_input_absppath = _common.native_path_to_posix(config_input_absnpath)
+        assert(os.path.commonprefix([res_base_absnpath, config_input_absnpath]) == config_input_absnpath)
+        res_base_relppath = os.path.relpath(res_base_absppath, config_input_absppath)
+        # print(runtime.config_data['base_url'],res_base_relppath, input_uri)
+        output_url = urljoin(runtime.config_data['base_url'],res_base_relppath)
+        output_url += '/'
+        output_url = urljoin(output_url, input_uri)
+        # print(output_url)
+        return output_url
+
+_FUNC_DEPENDENCY_LIST.append((
+    '_feature_templates._func_jinja_env_init',
+    _func_jinja_env,
+    '_feature_templates._func_jinja_env_ready',
+))
