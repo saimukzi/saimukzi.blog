@@ -88,19 +88,19 @@ async function getArticleData_promise(articleId) {
     console.log('getArticleData_promise', articleId);
     var articleDbPath = getDbPath('article.'+articleId);
     var retDict = {
-        'meta': await getJson_promise(articleDbPath + '/meta.json'),
-        'content': await getTxt_promise(articleDbPath + '/content.txt'),
+        'meta': await getJson_promise(joinPath([articleDbPath, 'meta.json'])),
+        'content': await getTxt_promise(joinPath([articleDbPath, 'content.txt'])),
     };
     return retDict;
 }
 
 function getTagData_promise(tagId) {
-    return getJson_promise('/tags/' + tagId + '.json');
+    var url = joinPath([CONFIG['base_url'], 'tags', tagId + '.json']);
+    return getJson_promise(url);
 }
 
 var json_cache = {};
 function getJson_promise(url) {
-    url = CONFIG['base_url'] + url;
     return new Promise(function(resolve, reject) {
         if (json_cache[url] != null) {
             resolve(json_cache[url]);
@@ -117,7 +117,6 @@ function getJson_promise(url) {
 
 var txt_cache = {};
 function getTxt_promise(url) {
-    var url = CONFIG['base_url'] + url;
     return new Promise(function(resolve, reject) {
         if (txt_cache[url] != null) {
             resolve(txt_cache[url]);
@@ -139,5 +138,17 @@ function getIsBottom() {
 function getDbPath(key) {
     console.log('getDbPath', key);
     var keyHash = md5(key);
-    return CONFIG['base_url'] + '/db/' + keyHash.substring(0, 2) + '/' + keyHash.substring(2, 4) + '/' + keyHash;
+    return joinPath([CONFIG['base_url'], 'db', keyHash.substring(0, 2), keyHash.substring(2, 4), keyHash]);
+}
+
+function joinPath(v) {
+    ret = '';
+    for (var i = 0; i < v.length; i++) {
+        if (v[i] == '') continue;
+        if ((ret != '') && (ret[ret.length-1] != '/')) {
+            ret += '/';
+        }
+        ret += v[i];
+    }
+    return ret;
 }
