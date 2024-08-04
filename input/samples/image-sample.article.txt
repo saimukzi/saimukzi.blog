@@ -4,7 +4,7 @@
     "id": "image-sample",
     "title": "Image sample",
     "date": "2024-08-04",
-    "tags":["LabCloverBlog"],
+    "tags":["LabCloverArticle"],
     "is_sample": true
 }
 

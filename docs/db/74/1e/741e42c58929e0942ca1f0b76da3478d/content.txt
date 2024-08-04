@@ -1,6 +1,6 @@
 
 <p>
-  <img src="https://saimukzi.github.io/labclover.blog.template/db/7b/c8/7bc8824ad41bb35d41316e83606ab18d/bin.jfif" alt="placeholder" />
+  <img src="https://saimukzi.github.io/labclover.article.template/db/7b/c8/7bc8824ad41bb35d41316e83606ab18d/bin.jfif" alt="placeholder" />
   <br/>
   Image in local folder
 </p>

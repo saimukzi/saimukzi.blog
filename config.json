@@ -1,9 +1,9 @@
 {
-  "title": "LabClover Blog Template",
+  "title": "LabClover Article Template",
   "input_path": "input",
   "templates_path": "templates",
   "output_path": "docs",
-  "base_url": "https://saimukzi.github.io/labclover.blog.template/",
+  "base_url": "https://saimukzi.github.io/labclover.article.template/",
   "copy_re_list": [
     ".*\\.js"
   ]

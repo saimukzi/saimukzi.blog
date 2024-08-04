@@ -1,14 +1,14 @@
 <html>
 <head>
-  {% if blog_meta_data is defined %}
-    <title>{{blog_meta_data.title}} | {{config.title}}</title>
+  {% if article_meta_data is defined %}
+    <title>{{article_meta_data.title}} | {{config.title}}</title>
   {% else %}
     <title>{{config.title}}</title>
   {% endif %}
   <meta charset="UTF-8">
   <script>
-    const IS_blog = {% if blog_meta_data is defined %}true{% else %}false{% endif %};
-    const BLOG_META = {% if blog_meta_data is defined %}{{blog_meta_data|json_encode}}{% else %}null{% endif %};
+    const IS_article = {% if article_meta_data is defined %}true{% else %}false{% endif %};
+    const ARTICLE_META = {% if article_meta_data is defined %}{{article_meta_data|json_encode}}{% else %}null{% endif %};
     const CONFIG = {{config|json_encode}};
   </script>
   <script src="{{'jquery-3.7.1.min.js'|url('templates')}}"></script>
@@ -16,19 +16,19 @@
   <script src="{{'main.js'|url('templates')}}"></script>
 </head>
 <body>
-  {% if blog_content is defined %}
-    <div id="target_blog">
-      <h1 class="blog_title">{{blog_meta_data.title}}</h1>
-      <div class="blog_content">
-        {{blog_content}}
+  {% if article_content is defined %}
+    <div id="target_article">
+      <h1 class="article_title">{{article_meta_data.title}}</h1>
+      <div class="article_content">
+        {{article_content}}
       </div>
     </div>
   {% endif %}
-  <div id="blog_end" style="display:none"></div>
+  <div id="article_end" style="display:none"></div>
   <div id="templates" style="display:none">
-    <div id="load_blog_template">
-      <h1 class="blog_title"></h1>
-      <div class="blog_content"></div>
+    <div id="load_article_template">
+      <h1 class="article_title"></h1>
+      <div class="article_content"></div>
     </div>
   </div>
 </body>

@@ -12,7 +12,7 @@ import _common
 MY_PATH = os.path.abspath(__file__)
 
 def main():
-    parser = argparse.ArgumentParser(description='Generate the blog')
+    parser = argparse.ArgumentParser(description='Generate the article')
     parser.add_argument('--config', type=str, default='config.json', help='config file')
 
     args = parser.parse_args()
@@ -96,11 +96,11 @@ def main():
     # for article_res_file in article_res_file_list:
     #     process_article_res_file_0(article_res_file, runtime)
 
-    # article_blog_file_list = list(filter(lambda x: x.endswith('.txt'), article_file_list))
-    # for article_blog_file in article_blog_file_list:
-    #     process_article_blog_file_0(article_blog_file, runtime)
-    # for article_blog_file in article_blog_file_list:
-    #     process_article_blog_file_1(article_blog_file, runtime)
+    # article_article_file_list = list(filter(lambda x: x.endswith('.txt'), article_file_list))
+    # for article_article_file in article_article_file_list:
+    #     process_article_article_file_0(article_article_file, runtime)
+    # for article_article_file in article_article_file_list:
+    #     process_article_article_file_1(article_article_file, runtime)
     
     # os.makedirs(os.path.join(runtime.config_data['output_path'], 'tags'), exist_ok=True)
     # for tag_data in runtime.tag_id_to_data_dict.values():
@@ -151,7 +151,7 @@ def get_func_key(func):
 #     'is_sample': False,
 # }
 
-# def process_article_blog_file_0(article_file, runtime):
+# def process_article_article_file_0(article_file, runtime):
 #     article_data = get_article_data(article_file)
 #     article_config_data = article_data['config']
 
@@ -162,7 +162,7 @@ def get_func_key(func):
 #     if not article_config_data['is_sample']:
 #         runtime.sample_only = False
 
-# def process_article_blog_file_1(article_file, runtime):
+# def process_article_article_file_1(article_file, runtime):
 #     # article_data = get_article_data(article_file)
 #     # article_config_data = article_data['config']
 #     # article_content = article_data['content']

@@ -1,10 +1,10 @@
 === META START ===
 
 {
-    "id": "labclover-blog-startup-sample",
+    "id": "labclover-article-startup-sample",
     "title": "開始第一篇文章",
     "date": "2024-07-24",
-    "tags":["LabCloverBlog"],
+    "tags":["LabCloverArticle"],
     "is_sample": true
 }
 
