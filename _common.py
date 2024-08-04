@@ -37,6 +37,6 @@ def to_rel_url(path):
     parts = pathlib.PurePath(path).parts
     return '/'.join(parts)
 
-# def local_path_to_abs_uri(npath):
-#     npath = os.path.abspath(npath)
-#     return pathlib.Path(npath).as_uri()
+def native_path_to_posix(npath):
+    npath = os.path.abspath(npath)
+    return pathlib.Path(npath).as_posix()
