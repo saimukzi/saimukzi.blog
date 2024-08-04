@@ -12,3 +12,6 @@ pip install --upgrade Jinja2
 python cmd_gen.py --config config-local.json
 python -m http.server --directory tmp/docs 8000
 # http://localhost:8000
+
+# before push
+python cmd_gen.py
