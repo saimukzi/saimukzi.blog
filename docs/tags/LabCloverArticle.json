@@ -1,8 +1,8 @@
 {
   "article_id_list": [
-    "image-sample",
     "labclover-article-startup-sample",
-    "url-sample-article"
+    "url-sample-article",
+    "image-sample"
   ],
   "tag_id": "LabCloverArticle"
 }

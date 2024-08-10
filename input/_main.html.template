@@ -16,11 +16,27 @@
   <script src="{{'js/main.js'|abs}}"></script>
 </head>
 <body>
+  <div id="all_tag_list">
+    <p>All tag list</p>
+    <ul>
+      {% for tag_data in runtime.blog_meta_dict.tag_data_list %}
+        <li>{{tag_data.tag_id}}</li>
+      {% endfor %}
+    </ul>
+  </div>
   {% if article_content is defined %}
     <div id="target_article">
       <h1 class="article_title">{{article_meta_data.title}}</h1>
       <div class="article_content">
         {{article_content}}
+      </div>
+      <div class="article_tag_list">
+        <p>Article tag list</p>
+        <ul>
+          {% for tag in article_meta_data.tags %}
+            <li>{{tag}}</li>
+          {% endfor %}
+        </ul>
       </div>
     </div>
   {% endif %}
