@@ -8,22 +8,22 @@ import _feature_base
 import _feature_resource
 import _global
 
-_FUNC_DEPENDENCY_LIST = []
+_STEP_DEPENDENCY_LIST = []
 
-def _func_gen_article_file_list(runtime):
+def _step_gen_article_file_list(runtime):
     article_dir = runtime.config_data['input_path']
     article_file_list = _common.find_file(article_dir)
     article_file_list = list(filter(lambda x: x.endswith('.article.txt'), article_file_list))
     runtime.article_file_list = article_file_list
 
-def _func_article_file_list_ready(runtime):
+def _step_article_file_list_ready(runtime):
     pass
 
-_FUNC_DEPENDENCY_LIST.append((_feature_base._func_load_config, _func_gen_article_file_list))
-_FUNC_DEPENDENCY_LIST.append((_func_gen_article_file_list, _func_article_file_list_ready))
-_FUNC_DEPENDENCY_LIST.append((_func_article_file_list_ready, _feature_base._func_output_ready))
+_STEP_DEPENDENCY_LIST.append((_feature_base._step_load_config, _step_gen_article_file_list))
+_STEP_DEPENDENCY_LIST.append((_step_gen_article_file_list, _step_article_file_list_ready))
+_STEP_DEPENDENCY_LIST.append((_step_article_file_list_ready, _feature_base._step_output_ready))
 
-def _func_gen_article_meta_list(runtime):
+def _step_gen_article_meta_list(runtime):
     runtime.article_meta_list = []
     for article_path in runtime.article_file_list:
         article_meta = get_article_data(article_path)['meta']
@@ -31,14 +31,14 @@ def _func_gen_article_meta_list(runtime):
             continue
         runtime.article_meta_list.append(article_meta)
 
-def _func_article_meta_list_ready(runtime):
+def _step_article_meta_list_ready(runtime):
     pass
 
-_FUNC_DEPENDENCY_LIST.append((_func_gen_article_file_list, _func_gen_article_meta_list))
-_FUNC_DEPENDENCY_LIST.append((_func_gen_article_meta_list, _func_article_meta_list_ready))
-_FUNC_DEPENDENCY_LIST.append((_func_article_meta_list_ready, _feature_base._func_output_ready))
+_STEP_DEPENDENCY_LIST.append((_step_gen_article_file_list, _step_gen_article_meta_list))
+_STEP_DEPENDENCY_LIST.append((_step_gen_article_meta_list, _step_article_meta_list_ready))
+_STEP_DEPENDENCY_LIST.append((_step_article_meta_list_ready, _feature_base._step_output_ready))
 
-def _func_output_article(runtime):
+def _step_output_article(runtime):
     for article_meta in runtime.article_meta_list:
         article_data = get_article_data(article_meta['_path'])
         article_meta = article_data['meta']
@@ -76,13 +76,13 @@ def _func_output_article(runtime):
         with open(article_html_output_path, 'wt', encoding='utf-8') as f:
             f.write(runtime.main_template.render(render_data))
 
-_FUNC_DEPENDENCY_LIST.append((_feature_base._func_output_ready, _func_output_article))
+_STEP_DEPENDENCY_LIST.append((_feature_base._step_output_ready, _step_output_article))
 
-def _func_resource_suffix_blackset(runtime):
+def _step_resource_suffix_blackset(runtime):
     runtime.resource_suffix_blackset.add('.article.txt')
 
-_FUNC_DEPENDENCY_LIST.append((_feature_resource._func_resource_suffix_blackset_init, _func_resource_suffix_blackset))
-_FUNC_DEPENDENCY_LIST.append((_func_resource_suffix_blackset, _feature_resource._func_resource_suffix_blackset_ready))
+_STEP_DEPENDENCY_LIST.append((_feature_resource._step_resource_suffix_blackset_init, _step_resource_suffix_blackset))
+_STEP_DEPENDENCY_LIST.append((_step_resource_suffix_blackset, _feature_resource._step_resource_suffix_blackset_ready))
 
 # Helper functions
 
