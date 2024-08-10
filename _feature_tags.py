@@ -21,6 +21,17 @@ def _step_tag_id_to_data_dict_ready(runtime):
 
 _STEP_DEPENDENCY_LIST.append((_feature_articles._step_article_meta_list_ready, _step_gen_tag_id_to_data_dict, _step_tag_id_to_data_dict_ready))
 
+def _step_meta_tag_list(runtime):
+    tag_list = runtime.article_meta_list
+    tag_list = map(lambda x: x['tags'], tag_list)
+    tag_list = sum(tag_list, [])
+    tag_list = list(sorted(set(tag_list)))
+    runtime.blog_meta_dict['tag_list'] = tag_list
+
+_STEP_DEPENDENCY_LIST.append((_feature_base._step_init_done, _step_meta_tag_list))
+_STEP_DEPENDENCY_LIST.append((_feature_articles._step_article_meta_list_ready, _step_meta_tag_list))
+_STEP_DEPENDENCY_LIST.append((_step_meta_tag_list, _feature_base._step_output_ready))
+
 def _step_output(runtime):
     os.makedirs(os.path.join(runtime.config_data['output_path'], 'tags'), exist_ok=True)
     for tag_data in runtime.tag_id_to_data_dict.values():
