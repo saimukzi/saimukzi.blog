@@ -12,6 +12,7 @@ _STEP_DEPENDENCY_LIST = []
 def _step_jinja_env_init(runtime):
     runtime.jinja_env = jinja2.Environment(loader=jinja2.FileSystemLoader(runtime.config_data['input_path']))
     runtime.jinja_env.filters['json_encode'] = jinja_filter_json_encode
+    runtime.jinja_env.filters['abs'] = jinja_filter_abs
 
 def _step_jinja_env_ready(runtime):
     pass
@@ -56,3 +57,23 @@ _STEP_DEPENDENCY_LIST.append((_step_resource_suffix_blackset, _feature_resource.
 
 def jinja_filter_json_encode(obj):
     return json.dumps(obj)
+
+@jinja2.pass_context
+def jinja_filter_abs(context, input_uri):
+    runtime = context['runtime']
+    if input_uri.startswith('/'):
+        output_url = urljoin(runtime.config_data['base_url'], input_uri[1:])
+        return output_url
+    else:
+        res_base_absnpath = context['res_base_absnpath']
+        res_base_absppath = _common.native_path_to_posix(res_base_absnpath)
+        config_input_absnpath = runtime.config_data['input_path']
+        config_input_absppath = _common.native_path_to_posix(config_input_absnpath)
+        assert(os.path.commonprefix([res_base_absnpath, config_input_absnpath]) == config_input_absnpath)
+        res_base_relppath = os.path.relpath(res_base_absppath, config_input_absppath)
+        # print(runtime.config_data['base_url'],res_base_relppath, input_uri)
+        output_url = urljoin(runtime.config_data['base_url'],res_base_relppath)
+        output_url += '/'
+        output_url = urljoin(output_url, input_uri)
+        # print(output_url)
+        return output_url

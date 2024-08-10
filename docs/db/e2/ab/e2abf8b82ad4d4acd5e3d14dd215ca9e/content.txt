@@ -1,5 +1,5 @@
 
-<p>'/js/jquery-3.7.1.min.js'|copy : https://saimukzi.github.io/labclover.blog.template/js/jquery-3.7.1.min.js</p>
-<p>'../js/jquery-3.7.1.min.js'|copy : https://saimukzi.github.io/labclover.blog.template/js/jquery-3.7.1.min.js</p>
-<p>'js/jquery-3.7.1.min.js'|copy : https://saimukzi.github.io/labclover.blog.template/samples/js/jquery-3.7.1.min.js</p>
-<p>'jquery-3.7.1.min.js'|copy : https://saimukzi.github.io/labclover.blog.template/samples/jquery-3.7.1.min.js</p>
+<p>'/js/jquery-3.7.1.min.js'|abs : https://saimukzi.github.io/labclover.blog.template/js/jquery-3.7.1.min.js</p>
+<p>'../js/jquery-3.7.1.min.js'|abs : https://saimukzi.github.io/labclover.blog.template/js/jquery-3.7.1.min.js</p>
+<p>'js/jquery-3.7.1.min.js'|abs : https://saimukzi.github.io/labclover.blog.template/samples/js/jquery-3.7.1.min.js</p>
+<p>'jquery-3.7.1.min.js'|abs : https://saimukzi.github.io/labclover.blog.template/samples/jquery-3.7.1.min.js</p>

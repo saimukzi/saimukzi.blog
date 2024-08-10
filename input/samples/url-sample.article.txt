@@ -12,9 +12,9 @@
 
 === CONTENT START ===
 
-<p>'/js/jquery-3.7.1.min.js'|copy : {{'/js/jquery-3.7.1.min.js'|copy}}</p>
-<p>'../js/jquery-3.7.1.min.js'|copy : {{'../js/jquery-3.7.1.min.js'|copy}}</p>
-<p>'js/jquery-3.7.1.min.js'|copy : {{'js/jquery-3.7.1.min.js'|copy}}</p>
-<p>'jquery-3.7.1.min.js'|copy : {{'jquery-3.7.1.min.js'|copy}}</p>
+<p>'/js/jquery-3.7.1.min.js'|abs : {{'/js/jquery-3.7.1.min.js'|abs}}</p>
+<p>'../js/jquery-3.7.1.min.js'|abs : {{'../js/jquery-3.7.1.min.js'|abs}}</p>
+<p>'js/jquery-3.7.1.min.js'|abs : {{'js/jquery-3.7.1.min.js'|abs}}</p>
+<p>'jquery-3.7.1.min.js'|abs : {{'jquery-3.7.1.min.js'|abs}}</p>
 
 === CONTENT END ===
