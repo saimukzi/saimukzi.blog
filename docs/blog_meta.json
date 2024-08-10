@@ -1,5 +1,8 @@
 {
-  "tag_list": [
-    "LabCloverArticle"
+  "tag_data_list": [
+    {
+      "count": 3,
+      "tag_id": "LabCloverArticle"
+    }
   ]
 }
