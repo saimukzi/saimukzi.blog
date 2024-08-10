@@ -1,11 +1,17 @@
 $(document).ready(function() {
-    detectBottomAndLoadMore();
-    $(window).on('resize', detectBottomAndLoadMore);
 });
 
-addEventListener('scroll', () => {
+async function _document_ready_promise() {
+    await loadBlogMeta_promise();
     detectBottomAndLoadMore();
-});
+    $(window).on('resize', detectBottomAndLoadMore);
+    addEventListener('scroll', detectBottomAndLoadMore);
+}
+
+var blog_meta = null;
+async function loadBlogMeta_promise() {
+    blog_meta = await getJson_promise(joinPath([CONFIG['base_url'], 'blog_meta.json']));
+}
 
 var detectBottomAndLoadMoreBusy = false;
 function detectBottomAndLoadMore() {
