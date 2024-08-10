@@ -1,5 +1,6 @@
 import _common
 import json
+import os
 import shutil
 
 _STEP_DEPENDENCY_LIST = []
@@ -23,12 +24,20 @@ def _step_load_config(runtime):
 
 _STEP_DEPENDENCY_LIST.append((_step_init_done, _step_load_config))
 
-def _step_clear_output_path(runtime):
+def _step_reset_output_folder(runtime):
     shutil.rmtree(runtime.config_data['output_path'], ignore_errors=True)
+    os.makedirs(runtime.config_data['output_path'])
 
-_STEP_DEPENDENCY_LIST.append((_step_load_config, _step_clear_output_path))
+_STEP_DEPENDENCY_LIST.append((_step_load_config, _step_reset_output_folder))
 
 def _step_output_ready(runtime):
     pass
 
-_STEP_DEPENDENCY_LIST.append((_step_clear_output_path, _step_output_ready))
+_STEP_DEPENDENCY_LIST.append((_step_reset_output_folder, _step_output_ready))
+
+def _step_output_blog_meta(runtime):
+    blog_meta_path = os.path.join(runtime.config_data['output_path'], 'blog_meta.json')
+    with open(blog_meta_path, 'w') as f:
+        json.dump(runtime.blog_meta_dict, f, indent=2, sort_keys=True)
+
+_STEP_DEPENDENCY_LIST.append((_step_output_ready, _step_output_blog_meta))
