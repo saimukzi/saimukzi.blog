@@ -28,6 +28,7 @@ def _func_gen_file_list(runtime):
 def _func_input_resource_file_list_ready(runtime):
     pass
 
+_FUNC_DEPENDENCY_LIST.append((_feature_base._func_load_config,_func_gen_file_list))
 _FUNC_DEPENDENCY_LIST.append((_func_resource_suffix_blackset_ready,_func_gen_file_list))
 _FUNC_DEPENDENCY_LIST.append((_func_gen_file_list,_func_input_resource_file_list_ready))
 
