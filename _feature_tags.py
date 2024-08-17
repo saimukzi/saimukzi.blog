@@ -1,5 +1,7 @@
+import _common
 import _feature_articles
 import _feature_base
+import _global
 import json
 import os
 
@@ -32,6 +34,8 @@ def _step_meta_tag_data_list(runtime):
     tag_data_list = map(lambda x: {'tag_id': x, 'count': value_to_count_dict[x]}, tag_data_list)
     tag_data_list = sorted(tag_data_list, key=lambda x: (-x['count'], x['tag_id']))
     tag_data_list = list(tag_data_list)
+    for tag_data in tag_data_list:
+        tag_data['data_url'] = _common.urljoin(_global.db_url('tag.'+tag_data['tag_id'], runtime),'tag_data.json')
     runtime.blog_meta_dict['tag_data_list'] = tag_data_list
 
 _STEP_DEPENDENCY_LIST.append((_feature_base._step_init_done, _step_meta_tag_data_list))
@@ -39,10 +43,11 @@ _STEP_DEPENDENCY_LIST.append((_feature_articles._step_article_meta_list_ready, _
 _STEP_DEPENDENCY_LIST.append((_step_meta_tag_data_list, _feature_base._step_output_ready))
 
 def _step_output(runtime):
-    os.makedirs(os.path.join(runtime.config_data['output_path'], 'tags'), exist_ok=True)
     for tag_data in runtime.tag_id_to_data_dict.values():
         tag_id = tag_data['tag_id']
-        tag_output_path = os.path.join(runtime.config_data['output_path'], 'tags', f'{tag_id}.json')
+        tag_output_path = _global.db_path(f'tag.{tag_id}', runtime)
+        os.makedirs(tag_output_path, exist_ok=True)
+        tag_output_path = os.path.join(tag_output_path, 'tag_data.json')
         with open(tag_output_path, 'w') as f:
             json.dump(tag_data, f, indent=2, sort_keys=True)
 

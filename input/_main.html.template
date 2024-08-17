@@ -22,6 +22,11 @@
       <div class="article_content">
         {{article_content}}
       </div>
+      <div class="article_tag_list">
+        {% for tag_data in runtime.blog_meta_dict.tag_data_list %}
+          <a href="{{tag_data.data_url}}">{{tag_data.tag_id}}</a>
+        {% endfor %}
+      </div>
     </div>
   {% endif %}
   <div id="article_end" style="display:none"></div>

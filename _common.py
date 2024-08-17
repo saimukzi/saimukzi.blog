@@ -2,6 +2,8 @@ import hashlib
 import os
 import pathlib
 
+from urllib.parse import urljoin as _urljoin
+
 def find_file(dir):
     file_list = []
     for root, _, files in os.walk(dir):
@@ -40,3 +42,11 @@ def to_rel_url(path):
 def native_path_to_posix(npath):
     npath = os.path.abspath(npath)
     return pathlib.Path(npath).as_posix()
+
+def urljoin(*args):
+    ret = args[0]
+    for i in args[1:]:
+        if not ret.endswith('/'):
+            ret += '/'
+        ret = _urljoin(ret, i)
+    return ret
