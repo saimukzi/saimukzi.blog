@@ -6,5 +6,6 @@
   "base_url": "https://blog.saimukzi.com/",
   "copy_re_list": [
     ".*\\.js"
-  ]
+  ],
+  "cname": "blog.saimukzi.com"
 }
