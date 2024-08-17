@@ -3,7 +3,7 @@
   "input_path": "input",
   "templates_path": "templates",
   "output_path": "docs",
-  "base_url": "https://saimukzi.github.io/labclover.blog.template/",
+  "base_url": "https://blog.saimukzi.com/",
   "copy_re_list": [
     ".*\\.js"
   ]
