@@ -1,4 +1,5 @@
 $(document).ready(function() {
+    _document_ready_promise();
 });
 
 async function _document_ready_promise() {
